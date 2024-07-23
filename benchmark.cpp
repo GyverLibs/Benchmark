@@ -40,3 +40,20 @@ uint32_t benchEnd(Stream* log) {
     }
     return count;
 }
+
+#if defined(AVR)
+extern unsigned int __bss_end;
+extern unsigned int __heap_start;
+extern void* __brkval;
+#endif
+
+size_t getFreeHeap() {
+#if defined(AVR)
+    int i;
+    return ((int)__brkval == 0) ? ((int)&i - (int)&__bss_end) : ((int)&i - (int)__brkval);
+#elif defined(ESP8266) || defined(ESP32)
+    return ESP.getFreeHeap();
+#else
+#error "No free head implementation for given platform"
+#endif
+}

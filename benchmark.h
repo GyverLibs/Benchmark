@@ -6,3 +6,6 @@ void benchBegin();
 
 // закончить измерение. Вернёт кол-во тактов. Опционально подключить лог
 uint32_t benchEnd(Stream* log = nullptr);
+
+// получить размер свободной памяти
+size_t getFreeHeap();
