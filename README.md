@@ -7,7 +7,7 @@
 [![Foo](https://img.shields.io/badge/ПОДПИСАТЬСЯ-НА%20ОБНОВЛЕНИЯ-brightgreen.svg?style=social&logo=telegram&color=blue)](https://t.me/GyverLibs)
 
 # Benchmark
-Измерение времени выполнения кода для Arduino
+Измерение времени выполнения кода для Arduino и измерения количества свободной оперативной памяти
 
 ### Совместимость
 - AVR (**библиотека использует Timer 1**)
@@ -29,6 +29,7 @@ void benchBegin();
 
 // закончить измерение. Вернёт кол-во тактов. Опционально подключить лог
 uint32_t benchEnd(Stream* log = nullptr);
+uint32_t benchEnd(Stream& log);
 
 // получить размер свободной памяти
 size_t getFreeHeap();
@@ -36,9 +37,14 @@ size_t getFreeHeap();
 
 ### Пример
 ```cpp
-benchBegin();
-delay(1);
-benchEnd(&Serial);
+#include <Benchmark.h>
+
+void setup() {
+    benchBegin();
+    delay(1);
+    benchEnd(Serial);
+}
+void loop() {}
 ```
 
 <a id="versions"></a>

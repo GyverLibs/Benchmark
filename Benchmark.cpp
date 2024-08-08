@@ -1,4 +1,4 @@
-#include "benchmark.h"
+#include "Benchmark.h"
 
 #if defined(AVR)
 static volatile uint16_t _ovf_count = 0;
@@ -60,6 +60,6 @@ size_t getFreeHeap() {
 #elif defined(ESP8266) || defined(ESP32)
     return ESP.getFreeHeap();
 #else
-#error "No free head implementation for given platform"
+#error "No free heap implementation for given platform"
 #endif
 }
