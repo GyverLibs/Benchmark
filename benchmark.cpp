@@ -23,7 +23,7 @@ void benchBegin() {
 #endif
 }
 
-uint32_t benchEnd(Stream* log) {
+float benchEnd(Stream* log) {
 #if defined(AVR)
     TCCR1B = 0;                                // остановить таймер
     uint32_t count = TCNT1 - 2;                // минус два такта на действия
@@ -31,14 +31,20 @@ uint32_t benchEnd(Stream* log) {
 #elif defined(ESP8266) || defined(ESP32)
     uint32_t count = ESP.getCycleCount() - _count;
 #endif
+
+    float us = count * (float)(1000000.0f / F_CPU);
     if (log) {
         log->print("bench: ");
-        log->print(count * (float)(1000000.0f / F_CPU), 4);
+        log->print(us, 4);
         log->print("us (");
         log->print(count);
         log->println(" ticks)");
     }
-    return count;
+    return us;
+}
+
+float benchEnd(Stream& log) {
+    return benchEnd(&log);
 }
 
 #if defined(AVR)
