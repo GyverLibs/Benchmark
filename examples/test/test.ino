@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <benchmark.h>
+#include <Benchmark.h>
 
 void setup() {
     Serial.begin(115200);
