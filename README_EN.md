@@ -1,61 +1,88 @@
-This is an automatic translation, may be incorrect in some places. See sources and examples!
+This is an automatic translation and may be incorrect in some places. See the source README and examples for authoritative information.
+
+[![latest](https://img.shields.io/github/v/release/GyverLibs/Benchmark.svg?color=brightgreen)](https://github.com/GyverLibs/Benchmark/releases/latest/download/Benchmark.zip)
+[![PIO](https://badges.registry.platformio.org/packages/gyverlibs/library/Benchmark.svg)](https://registry.platformio.org/libraries/gyverlibs/Benchmark)
+[![Foo](https://img.shields.io/badge/Website-AlexGyver.ru-blue.svg?style=flat-square)](https://alexgyver.ru/)
+[![Foo](https://img.shields.io/badge/%E2%82%BD%24%E2%82%AC%20%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%B0%D1%82%D1%8C-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B0-orange.svg?style=flat-square)](https://alexgyver.ru/support_alex/)
+[![Foo](https://img.shields.io/badge/README-ENGLISH-blueviolet.svg?style=flat-square)](https://github-com.translate.goog/GyverLibs/Benchmark?_x_tr_sl=ru&_x_tr_tl=en)  
+
+[![Foo](https://img.shields.io/badge/ПОДПИСАТЬСЯ-НА%20ОБНОВЛЕНИЯ-brightgreen.svg?style=social&logo=telegram&color=blue)](https://t.me/GyverLibs)
 
 # Benchmark
-Measurement of code execution time for arduino
+Measure code execution time for Arduino and measure the amount of free RAM
 
-## compatibility
-- AVR (** The library uses Timer 1 **)
+### Compatibility
+- AVR (**Library uses Timer 1**)
 - ESP8266
 - ESP32
 
-## Content
-- [use] (#usage)
-- [versions] (#varsions)
-- [installation] (# Install)
-- [bugs and feedback] (#fedback)
+## Contents
+- [Use of use](#usage)
+- [Versions](#versions)
+- [Installation](#install)
+- [Bugs and feedback](#feedback)
 
-<a id="usage"> </a>
+<a id="usage"></a>
 
-## Usage
-`` `CPP
-Benchbegin ();
-DELAY (1);
-Benchend (& serial);
-`` `
+## Use of use
+```cpp
+// begin
+void benchBegin();
 
-<a id="versions"> </a>
+// complete the measurement. It'll bring back the clock. Optionally connect the log
+uint32_t benchEnd(Stream* log = nullptr);
+uint32_t benchEnd(Stream& log);
 
-## versions
-- V1.0
+// get the amount of free memory
+size_t getFreeHeap();
+```
 
-<a id="install"> </a>
+### Example
+```cpp
+#include <Benchmark.h>
+
+void setup() {
+	Serial.begin(115200);
+    benchBegin();
+    delay(1);
+    benchEnd(Serial);
+}
+void loop() {}
+```
+
+<a id="versions"></a>
+
+## Versions
+- v1.0
+
+<a id="install"></a>
 ## Installation
-- The library can be found by the name ** Benchmark ** and installed through the library manager in:
-- Arduino ide
-- Arduino ide v2
-- Platformio
-- [download the library] (https://github.com/gyverlibs/benchmark/archive/refs/heads/main.zip) .Zip archive for manual installation:
-- unpack and put in * C: \ Program Files (X86) \ Arduino \ Libraries * (Windows X64)
-- unpack and put in * C: \ Program Files \ Arduino \ Libraries * (Windows X32)
-- unpack and put in *documents/arduino/libraries/ *
-- (Arduino id) Automatic installation from. Zip: * sketch/connect the library/add .Zip library ... * and specify downloaded archive
-- Read more detailed instructions for installing libraries [here] (https://alexgyver.ru/arduino-first/#%D0%A3%D1%81%D1%82%D0%B0%BD%D0%BE%BE%BE%BED0%B2%D0%BA%D0%B0_%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA)
+- The library can be found by the name **Benchmark** and installed through the library manager in:
+    - Arduino IDE
+    - Arduino IDE v2
+    - PlatformIO
+- [Download the library](https://github.com/GyverLibs/Benchmark/archive/refs/heads/main.zip).zip archive for manual installation:
+    - Unpack and put in *C:\Program Files (x86)\Arduino\libraries* (Windows x64)
+    - Unpack and put in *C:\Program Files\Arduino\libraries* (Windows x32)
+    - Unpack and put in *Documents/Arduino/libraries/ *
+    - (Arduino IDE) Automatic installation from .zip: *Sketch/Connect library/Add .ZIP library...* and specify downloaded archive
+- Read more detailed instructions for installing libraries[here](https://alexgyver.ru/arduino-first/#%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA)
 ### Update
-- I recommend always updating the library: errors and bugs are corrected in the new versions, as well as optimization and new features are added
-- through the IDE library manager: find the library how to install and click "update"
-- Manually: ** remove the folder with the old version **, and then put a new one in its place.“Replacement” cannot be done: sometimes in new versions, files that remain when replacing are deleted and can lead to errors!
+- I recommend always updating the library: new versions fix errors and bugs, as well as optimize and add new features.
+- Through the library manager IDE: find the library as when installing and click "Update"
+- Manually: **Delete the folder with the old version** and then put the new one in its place. “Replacement” can not be done: sometimes new versions delete files that will remain when replaced and can lead to errors!
 
-<a id="feedback"> </a>
+<a id="feedback"></a>
 
-## bugs and feedback
-Create ** Issue ** when you find the bugs, and better immediately write to the mail [alex@alexgyver.ru] (mailto: alex@alexgyver.ru)
-The library is open for refinement and your ** pull Request ** 'ow!
+## Bugs and feedback
+If you find bugs, create **Issue**, or better write to the mail immediately.[alex@alexgyver.ru](mailto:alex@alexgyver.ru)  
+The library is open for revision and your **Pull Requests*!
 
-When reporting about bugs or incorrect work of the library, it is necessary to indicate:
-- The version of the library
-- What is MK used
+When reporting bugs or incorrect work of the library, it is necessary to specify:
+- Library version
+- What is used by the IC
 - SDK version (for ESP)
-- version of Arduino ide
-- whether the built -in examples work correctly, in which the functions and designs are used, leading to a bug in your code
-- what code has been loaded, what work was expected from it and how it works in reality
-- Ideally, attach the minimum code in which the bug is observed.Not a canvas of a thousand lines, but a minimum code
+- Arduino IDE version
+- Are embedded examples that use features and designs that cause bugs in your code working correctly?
+- What code was downloaded, what work was expected from it and how it works in reality
+- Ideally, attach the minimum code in which the bug is observed. Not a canvas of a thousand lines, but a minimum code.
