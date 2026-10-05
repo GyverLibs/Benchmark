@@ -47,6 +47,33 @@ float benchEnd(Stream& log) {
     return benchEnd(&log);
 }
 
+uint32_t benchLoop(Stream& log, uint32_t uptime, uint32_t min_time, uint16_t window) {
+    static uint32_t tmr = 0;
+    static uint32_t minv = 0xffffffff, maxv = 0, avr;
+
+    uint32_t t = uptime - tmr;
+    if (tmr && t >= min_time) {
+        if (!tmr) avr = t;
+        if (window) avr += (int32_t(t) - int32_t(avr)) * 2 / (window + 1);
+        if (t < minv) minv = t;
+        if (t > maxv) maxv = t;
+
+        log.print("loop: ");
+        log.print(t);
+        if (window) {
+            log.print(", avr: ");
+            log.print(avr);
+        }
+        log.print(", min: ");
+        log.print(minv);
+        log.print(", max: ");
+        log.print(maxv);
+        log.println();
+    }
+    tmr = uptime;
+    return t;
+}
+
 #if defined(AVR)
 extern unsigned int __bss_end;
 extern unsigned int __heap_start;
