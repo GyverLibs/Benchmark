@@ -16,7 +16,6 @@
 
 ## Содержание
 - [Использование](#usage)
-- [Версии](#versions)
 - [Установка](#install)
 - [Баги и обратная связь](#feedback)
 
@@ -27,12 +26,20 @@
 // начать измерение
 void benchBegin();
 
-// закончить измерение. Вернёт кол-во тактов. Опционально подключить лог
-uint32_t benchEnd(Stream* log = nullptr);
-uint32_t benchEnd(Stream& log);
+// закончить измерение. Вернёт микросекунды
+float benchEnd();
 
-// измеритель loop, передать например (Serial, millis(), 5). window - размер окна скользящего среднего, 0 чтобы отключить
-uint32_t benchLoop(Stream& log, uint32_t uptime, uint32_t min_time, uint16_t window = 10);
+// закончить измерение и вывести микросекунды и такты
+float benchEnd(Print& log);
+
+// вывести статистику в целых микросекундах; window 0 отключает avr
+float benchEndStat(Print& log, uint16_t window = 10);
+
+// сбросить статистику benchEndStat и benchLoop
+void benchReset();
+
+// измеритель loop: min_us в us, вывод в ms, возврат в us
+uint32_t benchLoop(Print& log, uint32_t min_us = 0, uint16_t window = 10);
 
 // получить размер свободной памяти
 size_t getFreeHeap();
@@ -46,15 +53,24 @@ void setup() {
 	Serial.begin(115200);
     benchBegin();
     delay(1);
-    benchEnd(Serial);
+    benchEnd(Serial);  // высокоточный разовый замер
 }
-void loop() {}
+void loop() {
+    benchLoop(Serial, 5000, 10);
+}
 ```
 
-<a id="versions"></a>
+`benchEnd(Serial)` печатает один высокоточный замер: `bench: 1000.1250 us (16002 ticks)`. Для повторяющихся длинных замеров используй `benchEndStat(Serial, window)`. Он округляет значения до целых микросекунд:
 
-## Версии
-- v1.0
+```text
+bench: 1001, avr: 1000, min: 999, max: 1002 us
+```
+
+`benchLoop` использует тот же механизм `benchBegin()`/`benchEnd()`: первый вызов запускает замер, каждый следующий завершает его и запускает новый после вывода. Возврат и `min_us` - в микросекундах, вывод - в миллисекундах. `benchEndStat` и `benchLoop` используют общую статистику.
+
+- На AVR библиотека временно занимает Timer1 и его прерывание переполнения, конфигурация таймера восстанавливается в `benchEnd()`
+- На ESP частота CPU должна оставаться неизменной между `benchBegin()` и `benchEnd()`
+- На остальных архитектурах замер выполняется через `micros()`
 
 <a id="install"></a>
 ## Установка

@@ -29,9 +29,20 @@ Measure code execution time for Arduino and measure the amount of free RAM
 // begin
 void benchBegin();
 
-// complete the measurement. It'll bring back the clock. Optionally connect the log
-uint32_t benchEnd(Stream* log = nullptr);
-uint32_t benchEnd(Stream& log);
+// finish measurement and return microseconds
+float benchEnd();
+
+// finish measurement and print precise microseconds and CPU ticks
+float benchEnd(Print& log);
+
+// print integer-microsecond statistics; window 0 disables average output
+float benchEndStat(Print& log, uint16_t window = 10);
+
+// reset benchEndStat and benchLoop statistics
+void benchReset();
+
+// loop meter: min_us in us, output in ms, return value in us
+uint32_t benchLoop(Print& log, uint32_t min_us = 0, uint16_t window = 10);
 
 // get the amount of free memory
 size_t getFreeHeap();
@@ -45,14 +56,29 @@ void setup() {
 	Serial.begin(115200);
     benchBegin();
     delay(1);
-    benchEnd(Serial);
+    benchEnd(Serial);  // precise one-shot measurement
 }
-void loop() {}
+void loop() {
+    benchLoop(Serial, 5000, 10);
+}
 ```
+
+`benchEnd(Serial)` prints one precise measurement: `bench: 1000.1250us (16002 ticks)`. For repeated long measurements use `benchEndStat(Serial, window)`. It rounds values to whole microseconds:
+
+```text
+bench: 1001, avr: 1000, min: 999, max: 1002 us
+```
+
+`benchLoop` uses the same `benchBegin()`/`benchEnd()` mechanism: the first call starts measurement, and each subsequent call ends it and starts another after logging. The return value and `min_us` are in microseconds; output is in milliseconds. `benchEndStat` and `benchLoop` share one statistics accumulator.
+
+On AVR the library temporarily owns Timer1 and its overflow interrupt. `benchEnd()` restores the timer configuration.
+On ESP the CPU frequency must remain unchanged between `benchBegin()` and `benchEnd()`.
+Other architectures use `micros()` for measurement.
 
 <a id="versions"></a>
 
 ## Versions
+- v1.0.4
 - v1.0
 
 <a id="install"></a>

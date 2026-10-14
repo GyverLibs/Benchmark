@@ -14,6 +14,10 @@ Benchmark	KEYWORD1
 
 benchBegin	KEYWORD2
 benchEnd	KEYWORD2
+benchEndStat	KEYWORD2
+benchReset	KEYWORD2
+benchLoop	KEYWORD2
+getFreeHeap	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

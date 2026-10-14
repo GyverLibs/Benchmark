@@ -4,14 +4,20 @@
 // начать измерение
 void benchBegin();
 
-// закончить измерение. Вернёт микросекунды. Опционально подключить лог
-float benchEnd(Stream* log = nullptr);
+// закончить измерение. Вернёт микросекунды
+float benchEnd();
 
-// закончить измерение. Вернёт микросекунды. С логом
-float benchEnd(Stream& log);
+// закончить измерение и вывести микросекунды и такты
+float benchEnd(Print& log);
 
-// измеритель loop, передать например (Serial, millis(), 5). window - размер окна скользящего среднего, 0 чтобы отключить
-uint32_t benchLoop(Stream& log, uint32_t uptime, uint32_t min_time, uint16_t window = 10);
+// закончить измерение и вывести статистику в целых микросекундах
+float benchEndStat(Print& log, uint16_t window = 10);
+
+// сбросить статистику benchEndStat и benchLoop
+void benchReset();
+
+// begin/end измеритель loop. min_us в микросекундах, вывод в ms, window 0 отключает avr
+uint32_t benchLoop(Print& log, uint32_t min_us = 0, uint16_t window = 10);
 
 // получить размер свободной памяти
 size_t getFreeHeap();

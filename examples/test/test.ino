@@ -6,9 +6,17 @@ void setup() {
 
     benchBegin();
     delay(1);
-    benchEnd(&Serial);
+    float us = benchEnd();
+    Serial.println(us);
+
+    benchReset();
+    for (uint8_t i = 0; i < 5; i++) {
+        benchBegin();
+        delay(1);
+        benchEndStat(Serial, 10);  // current, avr, min, max
+    }
 }
 
 void loop() {
-
+    benchLoop(Serial, 5000, 10);
 }
